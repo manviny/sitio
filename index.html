@@ -1,1 +1,44 @@
-Hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Notas con Geolocalización</title>
+    <script>
+        function guardarNota() {
+            const nota = document.getElementById("nota").value;
+            
+            if (!nota.trim()) {
+                alert("Por favor, escribe una nota antes de guardar.");
+                return;
+            }
+            
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        alert(`Guardado en la posición: Latitud ${lat}, Longitud ${lon}\nNota: ${nota}`);
+                    },
+                    (error) => {
+                        alert("Error obteniendo la ubicación: " + error.message);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                alert("Geolocalización no soportada en este navegador.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Escribe una nota y guárdala con tu ubicación</h2>
+    <textarea id="nota" rows="4" cols="50" placeholder="Escribe aquí tu nota..."></textarea>
+    <br>
+    <button onclick="guardarNota()">Guardar Nota</button>
+</body>
+</html>
